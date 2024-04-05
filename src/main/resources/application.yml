@@ -1,0 +1,26 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: musical-booking
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    database:
+      platform: org.hibernate.dialect.MySQLDialect
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/musicalBooking?createDatabaseIfNotExist=true
+    username: root
+    password: Mauromas1
+
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%highlight(%level)] [%cyan(%thread)] %green(%logger{15}) - %msg%n"
+  level:
+    org:
+      springframework:
+        web: INFO
+    hibernate: ERROR
