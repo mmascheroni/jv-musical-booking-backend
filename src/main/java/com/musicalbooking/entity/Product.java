@@ -14,6 +14,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "productoId")
     private Long id;
 
     @Column(name = "name", unique = true, nullable = false)
@@ -23,7 +24,7 @@ public class Product {
     private String description;
 
     @Column(name = "images", nullable = false)
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<Image> images;
 
     public Product(String name, String description) {
