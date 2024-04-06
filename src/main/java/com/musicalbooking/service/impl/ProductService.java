@@ -75,9 +75,7 @@ public class ProductService implements IProductService {
 
     @Override
     public String deleteProductById(Long id) {
-        Product productToDelete = productRepository.findById(id).orElse(null);
-
-        if ( productToDelete != null ) {
+        if ( getProductById(id) != null ) {
             productRepository.deleteById(id);
             log.warn("The product with id {} has been delete", id);
             return "The product has been removed successfully";
