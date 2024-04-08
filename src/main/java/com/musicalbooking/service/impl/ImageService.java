@@ -101,8 +101,7 @@ public class ImageService implements IImageService {
 
     @Override
     public String deleteImageById(Long id) throws ResourceNotFoundException {
-        ImageDto imageDto = getImageById(id);
-        if ( productService.getProductById(imageDto.getProductDto().getId()) != null ) {
+        if ( getImageById(id) != null ) {
                 imageRepository.deleteById(id);
                 log.warn("The image with id {} has been delete", id);
 
