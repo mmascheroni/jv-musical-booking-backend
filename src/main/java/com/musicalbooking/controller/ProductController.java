@@ -2,7 +2,6 @@ package com.musicalbooking.controller;
 
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
-import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.service.impl.ProductService;
 import jakarta.validation.Valid;

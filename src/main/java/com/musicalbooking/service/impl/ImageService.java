@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicalbooking.dto.ImageDto;
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Image;
-import com.musicalbooking.entity.Product;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.repository.ImageRepository;
 import com.musicalbooking.service.IImageService;
@@ -98,33 +97,6 @@ public class ImageService implements IImageService {
     public ImageDto updateImage(Image image) {
         return null;
     }
-
-//    @Override
-//    public String deleteImageById(Long id) throws ResourceNotFoundException {
-//        ImageDto imageDto = getImageById(id);
-//        // Image ImageToDelete = objectMapper.convertValue(imageDto, Image.class);
-//        ProductDto productDto = productService.getProductById(imageDto.getProductDto().getId());
-//        Product product = objectMapper.convertValue(productDto, Product.class);
-//
-//        if ( product != null ) {
-//            Image imageToDelete = product.getImages()
-//                    .stream()
-//                    .filter(image -> image.getId().equals(id))
-//                    .findFirst().orElse(null);
-//
-//            if ( imageToDelete != null ) {
-//                log.info("IMAGE TO DELETE = " + imageToDelete);
-//                product.getImages().remove(imageToDelete);
-//                imageRepository.delete(imageToDelete);
-//                log.warn("The image with id {} has been delete", id);
-//
-//                return "The image has been removed successfully";
-//            }
-//        }
-//
-//        return "The image was not removed";
-//
-//    }
 
 
     @Override

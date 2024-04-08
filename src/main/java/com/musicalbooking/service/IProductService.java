@@ -2,7 +2,6 @@ package com.musicalbooking.service;
 
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
-import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 
 import java.util.List;
