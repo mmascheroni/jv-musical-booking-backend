@@ -1,6 +1,8 @@
 package com.musicalbooking.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,13 +20,16 @@ public class Product {
     private Long id;
 
     @Column(name = "name", unique = true, nullable = false)
+    @NotBlank(message = "The product name cannot be empty or null")
+    @Size(min = 3, max = 50, message = "The product name must have a minimum of 3 characters and maximum of 50")
     private String name;
 
     @Column(name = "description", nullable = false)
+    @NotBlank(message = "The product description cannot be empty or null")
+    @Size(min = 3, max = 200, message = "The product description must have a minimum of 3 characters and maximum of 200")
     private String description;
 
-    @Column(name = "images", nullable = false)
-    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Image> images;
 
     public Product(String name, String description) {
