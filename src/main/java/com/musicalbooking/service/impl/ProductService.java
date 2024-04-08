@@ -3,6 +3,7 @@ package com.musicalbooking.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.repository.ProductRepository;
 import com.musicalbooking.service.IProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,19 +24,21 @@ public class ProductService implements IProductService {
     private ObjectMapper objectMapper;
 
     @Override
-    public ProductDto getProductById(Long id) {
+    public ProductDto getProductById(Long id) throws ResourceNotFoundException {
 
         Product product = productRepository.findById(id).orElse(null);
         ProductDto productDto = null;
 
         if ( product != null ) {
             productDto = objectMapper.convertValue(product, ProductDto.class);
-            log.info("The product with id {} has been found: {}", id, product);
+            log.info("The product with id {} has been found: {}", id, productDto);
+
+            return productDto;
         } else {
             log.error("The product with id {} was not found", id);
+            throw new ResourceNotFoundException("Not found the product with id: " + id);
         }
 
-        return productDto;
     }
 
     @Override
@@ -74,15 +77,12 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String deleteProductById(Long id) {
+    public String deleteProductById(Long id) throws ResourceNotFoundException {
         if ( getProductById(id) != null ) {
             productRepository.deleteById(id);
             log.warn("The product with id {} has been delete", id);
-            return "The product has been removed successfully";
-        } else {
-            log.error("No registered products with {} found", id);
-            return "It has not been possible to delete the product since it does not exist";
         }
 
+        return "The product has been removed successfully";
     }
 }

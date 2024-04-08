@@ -2,12 +2,14 @@ package com.musicalbooking.service;
 
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.BadRequestException;
+import com.musicalbooking.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 
 public interface IProductService {
 
-    ProductDto getProductById(Long id);
+    ProductDto getProductById(Long id) throws ResourceNotFoundException;
 
     List<ProductDto> getProducts();
 
@@ -15,5 +17,5 @@ public interface IProductService {
 
     ProductDto updateProduct(Product product);
 
-    String deleteProductById(Long id);
+    String deleteProductById(Long id) throws ResourceNotFoundException;
 }

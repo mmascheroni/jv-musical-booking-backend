@@ -1,6 +1,9 @@
 package com.musicalbooking.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,10 +19,12 @@ public class Image {
     private Long id;
 
     @Column(name = "url", nullable = false)
+    @NotBlank(message = "The image url cannot be empty or null")
     private String url;
 
     @ManyToOne
-    @JoinColumn(name = "productoId")
+    @JoinColumn(name = "productoId", nullable = false)
+    @JsonIgnoreProperties("images")
     private Product product;
 
     public Image(String url, Product product) {
