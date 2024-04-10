@@ -47,7 +47,7 @@ public class GlobalExceptionHandler {
     public Map<String, String> processsBadRequest(BadRequestException e) {
         Map<String, String> exceptionMessage = new HashMap<>();
 
-        exceptionMessage.put("message", "Resource not found: " + e.getMessage());
+        exceptionMessage.put("message", e.getMessage());
 
         return exceptionMessage;
     }
@@ -65,20 +65,15 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, String> processValidateDataIntegrityViolationException(DataIntegrityViolationException e) {
-        Map<String, String> exceptionMessage = new HashMap<>();
-        String exMessage = e.getCause().getMessage();
-        String duplicateFieldValue = getDuplicateFieldValue(exMessage);
-
-        if (duplicateFieldValue != null) {
-            exceptionMessage.put("message", "The value '" + duplicateFieldValue + "' is already exists in the database.");
-        }
-
-
-        return exceptionMessage;
-    }
+//    @ExceptionHandler(DataIntegrityViolationException.class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    public Map<String, String> processValidateDataIntegrityViolationException(DataIntegrityViolationException e) {
+//        Map<String, String> exceptionMessage = new HashMap<>();
+//        exceptionMessage.put("message", e.getMessage());
+//
+//
+//        return exceptionMessage;
+//    }
 
 
     private String getDuplicateFieldValue(String exMessage) {

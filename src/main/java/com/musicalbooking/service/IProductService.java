@@ -2,6 +2,7 @@ package com.musicalbooking.service;
 
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 
@@ -15,7 +16,7 @@ public interface IProductService {
 
     Page<ProductDto> getProductsByPageable(int page, int size);
 
-    ProductDto postProduct(Product product);
+    ProductDto postProduct(Product product) throws BadRequestException;
 
     ProductDto updateProduct(Product product);
 

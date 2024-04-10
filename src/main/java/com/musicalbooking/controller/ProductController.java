@@ -2,6 +2,7 @@ package com.musicalbooking.controller;
 
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.service.impl.ProductService;
 import jakarta.validation.Valid;
@@ -37,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProductDto> postProduct(@Valid @RequestBody Product product) {
+    public ResponseEntity<ProductDto> postProduct(@Valid @RequestBody Product product) throws BadRequestException {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.postProduct(product));
     }
 
