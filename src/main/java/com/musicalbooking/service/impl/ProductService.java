@@ -8,6 +8,9 @@ import com.musicalbooking.repository.ProductRepository;
 import com.musicalbooking.service.IProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,6 +60,16 @@ public class ProductService implements IProductService {
             log.error("No registered products found");
         }
 
+        return productsDto;
+    }
+
+    @Override
+    public Page<ProductDto> getProductsByPageable(int page, int size) {
+        Pageable pageRequest = PageRequest.of(page, size);
+        Page<Product> products = productRepository.findAll(pageRequest);
+        Page<ProductDto> productsDto = products.map(product -> objectMapper.convertValue(product, ProductDto.class));
+
+        log.info("All these products were found by page {} and size {}: {}", page, size, productsDto);
         return productsDto;
     }
 
