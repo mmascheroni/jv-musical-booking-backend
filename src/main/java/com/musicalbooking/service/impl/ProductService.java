@@ -3,6 +3,7 @@ package com.musicalbooking.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.repository.ProductRepository;
 import com.musicalbooking.service.IProductService;
@@ -74,10 +75,18 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDto postProduct(Product product) {
+    public ProductDto postProduct(Product product) throws BadRequestException {
+        ProductDto productDto = null;
+
+        if ( productRepository.findByName(product.getName()) != null ) {
+            log.error("The product name is already exists in the database");
+
+            throw new BadRequestException("The product name is already exists in the database");
+        }
+
         Product productToPersist = productRepository.save(product);
 
-        ProductDto productDto = objectMapper.convertValue(productToPersist, ProductDto.class);
+        productDto = objectMapper.convertValue(productToPersist, ProductDto.class);
 
         log.info("Product registered successfully: {}", productDto);
 
