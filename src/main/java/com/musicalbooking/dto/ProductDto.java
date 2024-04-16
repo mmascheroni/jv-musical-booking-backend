@@ -26,6 +26,8 @@ public class ProductDto {
     private String description;
     private List<ImageDto> images;
 
+    private CategoryDto category;
+
     @Autowired
     private static ObjectMapper objectMapper;
 
@@ -35,7 +37,9 @@ public class ProductDto {
                 .map(image -> objectMapper.convertValue(image, ImageDto.class))
                 .collect(Collectors.toList());
 
-        return new ProductDto(product.getId(), product.getName(), product.getDescription(), imagesDto);
+        CategoryDto categoryDto = objectMapper.convertValue(product.getCategory(), CategoryDto.class);
+
+        return new ProductDto(product.getId(), product.getName(), product.getDescription(), imagesDto, categoryDto);
     }
 
     @Override
@@ -45,6 +49,7 @@ public class ProductDto {
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", images=" + images +
+                ", category=" + category +
                 '}';
     }
 }

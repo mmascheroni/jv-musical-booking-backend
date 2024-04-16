@@ -1,7 +1,9 @@
 package com.musicalbooking.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.musicalbooking.dto.CategoryDto;
 import com.musicalbooking.dto.ProductDto;
+import com.musicalbooking.entity.Category;
 import com.musicalbooking.entity.Product;
 import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
@@ -23,6 +25,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -75,7 +80,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductDto postProduct(Product product) throws BadRequestException {
+    public ProductDto postProduct(Product product) throws BadRequestException, ResourceNotFoundException {
         ProductDto productDto = null;
 
         if ( productRepository.findByName(product.getName()) != null ) {
@@ -84,10 +89,17 @@ public class ProductService implements IProductService {
             throw new BadRequestException("The product name is already exists in the database");
         }
 
+        CategoryDto categoryDto = categoryService.getCategoryById(product.getCategory().getId());
+
+        if ( categoryDto == null ) {
+            log.error("The category is not exists in the database");
+
+            throw new ResourceNotFoundException("Not found category with id: " + product.getCategory().getId());
+        }
+
         Product productToPersist = productRepository.save(product);
-
         productDto = objectMapper.convertValue(productToPersist, ProductDto.class);
-
+        productDto.setCategory(categoryDto);
         log.info("Product registered successfully: {}", productDto);
 
         return productDto;

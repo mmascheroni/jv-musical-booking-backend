@@ -38,7 +38,7 @@ public class ProductController {
     }
 
     @PostMapping()
-    public ResponseEntity<ProductDto> postProduct(@Valid @RequestBody Product product) throws BadRequestException {
+    public ResponseEntity<ProductDto> postProduct(@Valid @RequestBody Product product) throws BadRequestException, ResourceNotFoundException {
         return ResponseEntity.status(HttpStatus.CREATED).body(productService.postProduct(product));
     }
 

@@ -19,7 +19,7 @@ public class Product {
     @Column(name = "productoId")
     private Long id;
 
-    @Column(name = "name", unique = true, nullable = false)
+    @Column(name = "productName", unique = true, nullable = false)
     @NotBlank(message = "The product name cannot be empty or null")
     @Size(min = 3, max = 50, message = "The product name must have a minimum of 3 characters and maximum of 50")
     private String name;
@@ -32,6 +32,10 @@ public class Product {
     @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Image> images;
 
+    @ManyToOne()
+    @JoinColumn(name = "categoryId")
+    private Category category;
+
     public Product(String name, String description) {
         this.name = name;
         this.description = description;
@@ -41,6 +45,13 @@ public class Product {
         this.name = name;
         this.description = description;
         this.images = images;
+    }
+
+    public Product(String name, String description, List<Image> images, Category category) {
+        this.name = name;
+        this.description = description;
+        this.images = images;
+        this.category = category;
     }
 
     public void setName(String name) {
@@ -53,5 +64,9 @@ public class Product {
 
     public void setImages(List<Image> images) {
         this.images = images;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
     }
 }

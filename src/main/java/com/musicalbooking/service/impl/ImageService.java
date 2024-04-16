@@ -84,10 +84,10 @@ public class ImageService implements IImageService {
         if ( product != null ) {
             imageToPersist = imageRepository.save(image);
             imageDto = objectMapper.convertValue(imageToPersist, ImageDto.class);
+            product = productService.getProductById(image.getProduct().getId());
             imageDto.setProductDto(product);
+
             log.info("Image registered successfully: {}", imageDto);
-        } else {
-            log.error("It was not possible to add the image");
         }
 
         return imageDto;
@@ -104,11 +104,9 @@ public class ImageService implements IImageService {
         if ( getImageById(id) != null ) {
                 imageRepository.deleteById(id);
                 log.warn("The image with id {} has been delete", id);
-
-                return "The image has been removed successfully";
         }
 
-        return "The image was not removed";
+        return "The image has been removed successfully";
 
     }
 }
