@@ -16,7 +16,7 @@ public interface IProductService {
 
     Page<ProductDto> getProductsByPageable(int page, int size);
 
-    ProductDto postProduct(Product product) throws BadRequestException;
+    ProductDto postProduct(Product product) throws BadRequestException, ResourceNotFoundException;
 
     ProductDto updateProduct(Product product);
 
