@@ -29,7 +29,7 @@ public class Product {
     @Size(min = 3, max = 200, message = "The product description must have a minimum of 3 characters and maximum of 200")
     private String description;
 
-    @OneToMany(mappedBy = "product", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "product", orphanRemoval = true)
     private List<Image> images;
 
     @ManyToOne()

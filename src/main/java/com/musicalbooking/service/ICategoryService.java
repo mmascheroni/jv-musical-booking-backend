@@ -2,6 +2,7 @@ package com.musicalbooking.service;
 
 import com.musicalbooking.dto.CategoryDto;
 import com.musicalbooking.entity.Category;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 
 import java.util.List;
@@ -16,5 +17,5 @@ public interface ICategoryService {
 
     CategoryDto updateCategory(Category category);
 
-    String deleteCategoryById(Long id) throws ResourceNotFoundException;
+    String deleteCategoryById(Long id) throws ResourceNotFoundException, BadRequestException;
 }

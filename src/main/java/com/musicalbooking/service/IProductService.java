@@ -20,5 +20,5 @@ public interface IProductService {
 
     ProductDto updateProduct(Product product);
 
-    String deleteProductById(Long id) throws ResourceNotFoundException;
+    String deleteProductById(Long id) throws ResourceNotFoundException, BadRequestException;
 }
