@@ -59,7 +59,7 @@ public class CategoryService implements ICategoryService {
             return categoriesDto;
         }
 
-        log.error("No registered categories found");
+        log.warn("No registered categories found");
         return categoriesDto;
     }
 
