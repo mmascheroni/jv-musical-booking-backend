@@ -69,7 +69,7 @@ public class ImageService implements IImageService {
 
             log.info("All these images were found: {}", imagesDto);
         } else {
-            log.error("No registered images found");
+            log.warn("No registered images found");
         }
 
         return imagesDto;

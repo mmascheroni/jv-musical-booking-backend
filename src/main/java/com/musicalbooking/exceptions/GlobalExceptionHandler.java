@@ -1,7 +1,6 @@
 package com.musicalbooking.exceptions;
 
 import com.fasterxml.jackson.core.JsonParseException;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,26 +63,4 @@ public class GlobalExceptionHandler {
         return exceptionMessage;
     }
 
-
-//    @ExceptionHandler(DataIntegrityViolationException.class)
-//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-//    public Map<String, String> processValidateDataIntegrityViolationException(DataIntegrityViolationException e) {
-//        Map<String, String> exceptionMessage = new HashMap<>();
-//        exceptionMessage.put("message", e.getMessage());
-//
-//
-//        return exceptionMessage;
-//    }
-
-
-    private String getDuplicateFieldValue(String exMessage) {
-        if (exMessage.contains("Duplicate entry")) {
-            int startIndex = exMessage.indexOf("'") + 1;
-            int endIndex = exMessage.indexOf("'", startIndex);
-
-            return exMessage.substring(startIndex, endIndex);
-        }
-
-        return null;
-    }
 }

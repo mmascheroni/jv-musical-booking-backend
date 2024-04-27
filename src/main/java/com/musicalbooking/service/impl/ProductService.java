@@ -61,7 +61,7 @@ public class ProductService implements IProductService {
         List<Product> products = productRepository.findAll();
         List<ProductDto> productsDto = null;
 
-        if ( products != null ) {
+        if ( products.size() > 0 ) {
             productsDto = products.stream()
                     .map(product -> {
                         ProductDto productDto = objectMapper.convertValue(product, ProductDto.class);
@@ -74,7 +74,7 @@ public class ProductService implements IProductService {
 
             log.info("All these products were found: {}", productsDto);
         } else {
-            log.error("No registered products found");
+            log.warn("No registered products found");
         }
 
         return productsDto;
@@ -134,13 +134,10 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String deleteProductById(Long id) throws ResourceNotFoundException, BadRequestException {
+    public String deleteProductById(Long id) throws ResourceNotFoundException {
         if ( getProductById(id) != null ) {
             productRepository.deleteById(id);
             log.warn("The product with id {} has been delete", id);
-        } else {
-            throw new BadRequestException("Cannot delete category with id " + id
-                    + " because it is associated with one or more products.");
         }
 
         return "The product has been removed successfully";
