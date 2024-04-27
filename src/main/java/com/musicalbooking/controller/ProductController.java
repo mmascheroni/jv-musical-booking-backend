@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProductById(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteProductById(@PathVariable Long id) throws ResourceNotFoundException, BadRequestException {
         return ResponseEntity.ok(productService.deleteProductById(id));
     }
 }

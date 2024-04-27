@@ -3,8 +3,11 @@ package com.musicalbooking.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicalbooking.dto.CategoryDto;
 import com.musicalbooking.entity.Category;
+import com.musicalbooking.entity.Product;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.repository.CategoryRepository;
+import com.musicalbooking.repository.ProductRepository;
 import com.musicalbooking.service.ICategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class CategoryService implements ICategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -72,10 +78,17 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public String deleteCategoryById(Long id) throws ResourceNotFoundException {
+    public String deleteCategoryById(Long id) throws ResourceNotFoundException, BadRequestException {
         if ( getCategoryById(id) != null ) {
-            categoryRepository.deleteById(id);
-            log.warn("The category with id {} has been delete", id);
+            List<Product> products = productRepository.findByCategoryId(id);
+
+            if ( products.isEmpty() ) {
+                categoryRepository.deleteById(id);
+                log.warn("The category with id {} has been delete", id);
+            } else {
+                throw new BadRequestException("Cannot delete category with id " + id
+                        + " because it is associated with one or more products.");
+            }
         }
 
         return "The category has been removed successfully";

@@ -2,6 +2,7 @@ package com.musicalbooking.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.musicalbooking.dto.CategoryDto;
+import com.musicalbooking.dto.ImageDto;
 import com.musicalbooking.dto.ProductDto;
 import com.musicalbooking.entity.Category;
 import com.musicalbooking.entity.Product;
@@ -42,6 +43,10 @@ public class ProductService implements IProductService {
             productDto = objectMapper.convertValue(product, ProductDto.class);
             log.info("The product with id {} has been found: {}", id, productDto);
 
+            if (product.getImages().isEmpty()) {
+                productDto.setImages(null);
+            }
+
             return productDto;
         } else {
             log.error("The product with id {} was not found", id);
@@ -58,7 +63,13 @@ public class ProductService implements IProductService {
 
         if ( products != null ) {
             productsDto = products.stream()
-                    .map(product -> objectMapper.convertValue(product, ProductDto.class))
+                    .map(product -> {
+                        ProductDto productDto = objectMapper.convertValue(product, ProductDto.class);
+                        if (product.getImages().isEmpty()) {
+                            productDto.setImages(null);
+                        }
+                        return productDto;
+                    })
                     .collect(Collectors.toList());
 
             log.info("All these products were found: {}", productsDto);
@@ -73,7 +84,13 @@ public class ProductService implements IProductService {
     public Page<ProductDto> getProductsByPageable(int page, int size) {
         Pageable pageRequest = PageRequest.of(page, size);
         Page<Product> products = productRepository.findAll(pageRequest);
-        Page<ProductDto> productsDto = products.map(product -> objectMapper.convertValue(product, ProductDto.class));
+        Page<ProductDto> productsDto = products.map(product -> {
+            ProductDto productDto = objectMapper.convertValue(product, ProductDto.class);
+            if (product.getImages().isEmpty()) {
+                productDto.setImages(null);
+            }
+            return productDto;
+        });
 
         log.info("All these products were found by page {} and size {}: {}", page, size, productsDto);
         return productsDto;
@@ -82,6 +99,8 @@ public class ProductService implements IProductService {
     @Override
     public ProductDto postProduct(Product product) throws BadRequestException, ResourceNotFoundException {
         ProductDto productDto = null;
+        Category category = product.getCategory();
+        CategoryDto categoryDto = null;
 
         if ( productRepository.findByName(product.getName()) != null ) {
             log.error("The product name is already exists in the database");
@@ -89,17 +108,21 @@ public class ProductService implements IProductService {
             throw new BadRequestException("The product name is already exists in the database");
         }
 
-        CategoryDto categoryDto = categoryService.getCategoryById(product.getCategory().getId());
+        if ( category != null ) {
+            categoryDto = categoryService.getCategoryById(product.getCategory().getId());
 
-        if ( categoryDto == null ) {
-            log.error("The category is not exists in the database");
+            if ( categoryDto == null ) {
+                log.error("The category is not exists in the database");
 
-            throw new ResourceNotFoundException("Not found category with id: " + product.getCategory().getId());
+                throw new ResourceNotFoundException("Not found category with id: " + product.getCategory().getId());
+            }
         }
 
         Product productToPersist = productRepository.save(product);
         productDto = objectMapper.convertValue(productToPersist, ProductDto.class);
-        productDto.setCategory(categoryDto);
+
+        if (categoryDto != null ) productDto.setCategory(categoryDto);
+
         log.info("Product registered successfully: {}", productDto);
 
         return productDto;
@@ -111,10 +134,13 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public String deleteProductById(Long id) throws ResourceNotFoundException {
+    public String deleteProductById(Long id) throws ResourceNotFoundException, BadRequestException {
         if ( getProductById(id) != null ) {
             productRepository.deleteById(id);
             log.warn("The product with id {} has been delete", id);
+        } else {
+            throw new BadRequestException("Cannot delete category with id " + id
+                    + " because it is associated with one or more products.");
         }
 
         return "The product has been removed successfully";

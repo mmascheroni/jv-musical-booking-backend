@@ -2,10 +2,12 @@ package com.musicalbooking.controller;
 
 import com.musicalbooking.dto.CategoryDto;
 import com.musicalbooking.entity.Category;
+import com.musicalbooking.exceptions.BadRequestException;
 import com.musicalbooking.exceptions.ResourceNotFoundException;
 import com.musicalbooking.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +33,11 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDto> postCategory(@Valid @RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.postCategory(category));
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.postCategory(category));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) throws ResourceNotFoundException {
+    public ResponseEntity<String> deleteCategory(@PathVariable Long id) throws ResourceNotFoundException, BadRequestException {
         return ResponseEntity.ok(categoryService.deleteCategoryById(id));
     }
 }
