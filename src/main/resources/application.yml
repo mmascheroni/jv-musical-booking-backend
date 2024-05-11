@@ -12,9 +12,9 @@ spring:
       platform: org.hibernate.dialect.MySQLDialect
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/musicalBooking?createDatabaseIfNotExist=true
-    username: root
-    password: Mauromas1
+    url: ${DB_HOST}/musicalBooking?createDatabaseIfNotExist=true
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
 
 logging:
   pattern:
