@@ -1,0 +1,22 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: db-musical-booking
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: 'musical-booking'
+      MYSQL_USER: 'usr-admin'
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3366:3306"
+    volumes:
+      - musical_booking_db:/var/lib/mysql
+    networks:
+      - musical-booking-red
+
+volumes:
+  musical_booking_db:
+
+networks:
+  musical-booking-red:
+    driver: bridge

@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +61,14 @@ public class GlobalExceptionHandler {
         exceptionMessage.put("path", String.valueOf(e.getClass()));
         exceptionMessage.put("message", e.getMessage());
 
+        return exceptionMessage;
+    }
+
+    @ExceptionHandler({ HttpClientErrorException.class })
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public Map<String, String> handleHttpClientErrorException(HttpClientErrorException e) {
+        Map<String, String> exceptionMessage = new HashMap<>();
+        exceptionMessage.put("message", e.getStatusText());
         return exceptionMessage;
     }
 
